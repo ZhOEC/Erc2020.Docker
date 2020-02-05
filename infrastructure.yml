@@ -4,7 +4,7 @@ volumes:
   postgres_data:
     driver: local
 
-    services:
+services:
   postgres:
     container_name: ztoec-postgres
     image: postgres
