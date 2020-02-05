@@ -3,12 +3,8 @@ version: "3"
 volumes:
   postgres_data:
     driver: local
-  data-rabbitmq:
-    driver: local
-  data-elasticsearch:
-    driver: local
 
-services:
+    services:
   postgres:
     container_name: ztoec-postgres
     image: postgres
@@ -20,7 +16,7 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - 5432:5432
-      
+
   keycloak:
     container_name: ztoec-keycloak
     image: jboss/keycloak
@@ -40,30 +36,3 @@ services:
       - 8080:8080
     depends_on:
       - postgres
-
-  rabbitmq:
-    image: rabbitmq:management
-    restart: always
-    container_name: ztoec-rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_VHOST=ztoec
-    ports:
-      - 15672:15672
-      - 5671:5671
-      - 5672:5672
-    volumes:
-      - data-rabbitmq:/var/lib/rabbitmq
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.5.2
-    restart: always
-    container_name: ztoec-es
-    environment:
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-    volumes:
-      - data-elasticsearch:/usr/share/elasticsearch/data
-    ports:
-      - 9201:9201
-      - 9200:9200
-      - 9301:9300
