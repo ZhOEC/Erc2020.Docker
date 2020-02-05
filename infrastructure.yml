@@ -32,7 +32,8 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: 2020
     volumes:
-      - /keycloak/themes:/opt/jboss/keycloak/themes
+      - /keycloak/themes/genesis:/opt/jboss/keycloak/themes/genesis
+      - /keycloak/themes/zhoec:/opt/jboss/keycloak/themes/zhoec
     ports:
       - 8080:8080
     depends_on:
