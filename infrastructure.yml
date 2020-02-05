@@ -1,67 +1,69 @@
-version: '3'
+version: "3"
 
 volumes:
   postgres_data:
-      driver: local
+    driver: local
   data-rabbitmq:
-      driver: local
+    driver: local
   data-elasticsearch:
-      driver: local
-      
+    driver: local
+
 services:
   postgres:
-      image: postgres
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      environment:
-        POSTGRES_DB: keycloak
-        POSTGRES_USER: keycloak
-        POSTGRES_PASSWORD: password
-      ports:
-        - 5432:5432
+    container_name: ztoec-postgres
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+      
   keycloak:
-      image: jboss/keycloak
-      environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_SCHEMA: public
-        DB_PASSWORD: password
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: 2020
-      volumes:
-        - /keycloak/themes/genesis:/opt/jboss/keycloak/themes/genesis
-        
-      ports:
-        - 8080:8080
-      depends_on:
-        - postgres
-        
+    container_name: ztoec-keycloak
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: 2020
+    volumes:
+      - /keycloak/themes/genesis:/opt/jboss/keycloak/themes/genesis
+
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
   rabbitmq:
-      image: rabbitmq:management
-      restart: always
-      container_name: ztoec-rabbitmq
-      environment:
-        - RABBITMQ_DEFAULT_VHOST=ztoec
-      ports:
-        - 15672:15672
-        - 5671:5671
-        - 5672:5672
-      volumes:
-         - data-rabbitmq:/var/lib/rabbitmq
-        
+    image: rabbitmq:management
+    restart: always
+    container_name: ztoec-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=ztoec
+    ports:
+      - 15672:15672
+      - 5671:5671
+      - 5672:5672
+    volumes:
+      - data-rabbitmq:/var/lib/rabbitmq
+
   elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.5.2
-        restart: always
-        container_name: ztoec-es
-        environment:
-        - discovery.type=single-node
-        - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-        volumes:
-        - data-elasticsearch:/usr/share/elasticsearch/data
-        ports:
-        - 9201:9201
-        - 9200:9200
-        - 9301:9300
-        
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.5.2
+    restart: always
+    container_name: ztoec-es
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    volumes:
+      - data-elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9201
+      - 9200:9200
+      - 9301:9300
