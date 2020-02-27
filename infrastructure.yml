@@ -3,7 +3,9 @@ version: "3"
 volumes:
   postgres_data:
     driver: local
-  redis_data:
+  data-rabbitmq:
+    driver: local
+  data-elasticsearch:
     driver: local
 
 services:
@@ -39,13 +41,30 @@ services:
     depends_on:
       - postgres
 
-  redis:
-    image: redis
+  rabbitmq:
+    image: rabbitmq:management
     restart: always
-    container_name: ztoec-redis
-    command: redis-server --appendonly yes
+    container_name: ztoec-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=ztoec
     ports:
-      - 6379:6379
+      - 15672:15672
+      - 5671:5671
+      - 5672:5672
     volumes:
-      - redis_data:/data
+      - data-rabbitmq:/var/lib/rabbitmq
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.5.2
+    restart: always
+    container_name: ztoec-es
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    volumes:
+      - data-elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9201
+      - 9200:9200
+      - 9301:9300
         
