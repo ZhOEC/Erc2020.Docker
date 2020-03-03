@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 
 volumes:
   postgres_data:
@@ -68,3 +68,6 @@ services:
       - 9200:9200
       - 9301:9300
         
+networks:
+  default:
+    name: ztoec-erc
