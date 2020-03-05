@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   erc.households.indexing:
+    name: "ztoec-indexing"
     image: 10.67.1.238:5000/erchouseholdsindexing
     environment:
         RabbitMQ__ConnectionString: "amqp://ztoec-rabbitmq:5672/ztoec"
