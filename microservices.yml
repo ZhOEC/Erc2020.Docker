@@ -3,12 +3,12 @@ version: '3.4'
 services:
   erc.households.indexing:
     container_name: "ztoec-indexing"
-    image: 10.67.1.238:5000/erchouseholdsindexing
+    image: ${DOCKER_REGISTRY}erchouseholdsindexing
     environment:
-        RabbitMQ__ConnectionString: "amqp://ztoec-rabbitmq:5672/ztoec"
-        RabbitMQ__Username: guest
-        RabbitMQ__Password: guest
-        ConnectionStrings__Elasticsearch: "http://ztoec-es:9200"
+        RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
+        RabbitMQ__UserName: ${RabbitMQ__UserName}
+        RabbitMQ__Password: ${RabbitMQ__Password}
+        ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
 
 networks:
   default:
