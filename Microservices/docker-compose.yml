@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  erc.households.indexing:
+    container_name: "ztoec-indexing"
+    image: ${DOCKER_REGISTRY}erc/households/indexing
+    environment:
+        RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
+        RabbitMQ__UserName: ${RabbitMQ__UserName}
+        RabbitMQ__Password: ${RabbitMQ__Password}
+        ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
+
+networks:
+  default:
+    external:
+      name: ztoec-erc
