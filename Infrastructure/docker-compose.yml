@@ -78,20 +78,6 @@ services:
       - 5000:5000
     volumes:
       - data-registry:/var/lib/registry
-
-  api:
-    image: 10.67.1.238:5000/erc/households/api
-    restart: always
-    container_name: ztoec-households-api
-    ports:
-      -5050:80
-
-  ui:
-    image: 10.67.1.238:5000/erc/households/ui
-    restart: always
-    container_name: ztoec-households-ui
-    ports:
-      -8888:80
         
 networks:
   default:

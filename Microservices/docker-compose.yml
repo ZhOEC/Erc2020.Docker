@@ -10,6 +10,21 @@ services:
         RabbitMQ__Password: ${RabbitMQ__Password}
         ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
 
+erc.households.api:
+  image: ${DOCKER_REGISTRY}/erc/households/api
+  container_name: ztoec-households-api
+  environment:
+        ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
+        ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
+  ports:
+    -5050:80
+
+erc.households.ui:
+  image: ${DOCKER_REGISTRY}/erc/households/ui
+  container_name: ztoec-households-ui
+  ports:
+    -8888:80
+
 networks:
   default:
     external:
