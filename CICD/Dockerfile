@@ -3,6 +3,7 @@ USER root
 
 ENV http_proxy http://10.67.1.66:3128
 ENV https_proxy http://10.67.1.66:3128
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
 apt-get -y install apt-transport-https \
