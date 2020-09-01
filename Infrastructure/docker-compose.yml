@@ -76,10 +76,10 @@ services:
     image: docker.elastic.co/kibana/kibana-oss:7.9.0
     restart: always
     container_name: ztoec-kibana
-  ports:
-    - 5601:5601
-  depends_on:
-    - elasticsearch
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
 
   registry:
     image: registry:2
