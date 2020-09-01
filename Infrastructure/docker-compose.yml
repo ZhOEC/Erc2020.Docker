@@ -49,6 +49,7 @@ services:
     image: rabbitmq:management
     restart: always
     container_name: ztoec-rabbitmq
+    hostname: 'ztoec-rabbitmq'
     environment:
       - RABBITMQ_DEFAULT_VHOST=ztoec
     ports:
