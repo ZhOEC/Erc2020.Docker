@@ -51,7 +51,7 @@ services:
     container_name: ztoec-rabbitmq
     hostname: 'ztoec-rabbitmq'
     environment:
-      - RABBITMQ_DEFAULT_VHOST=ztoec
+      - RABBITMQ_DEFAULT_VHOST=households
     ports:
       - 15672:15672
       - 5671:5671
