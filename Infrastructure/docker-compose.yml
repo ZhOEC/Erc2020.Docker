@@ -23,6 +23,10 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - 5432:5432
+    labels:
+      - "co.elastic.logs/module=postgresql"
+      - "co.elastic.logs/fileset.stdout=access"
+      - "co.elastic.logs/fileset.stderr=error"
 
   keycloak:
     container_name: ztoec-keycloak
@@ -80,6 +84,22 @@ services:
       - 5601:5601
     depends_on:
       - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat-oss:7.9.0
+    restart: always
+    container_name: ztoec-filebeat
+    environment:
+      - output.elasticsearch.hosts=["ztoec-es:9200"]
+    command: filebeat -e -strict.perms=false
+    volumes:
+      - /filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - pglogs:/var/log/postgresql/:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+      - kibana
 
   registry:
     image: registry:2
