@@ -64,7 +64,7 @@ services:
       - data-rabbitmq:/var/lib/rabbitmq
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.2
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.0
     restart: always
     container_name: ztoec-es
     environment:
@@ -75,6 +75,40 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.9.0
+    restart: always
+    container_name: ztoec-kibana
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat-oss:7.9.0
+    restart: always
+    container_name: ztoec-filebeat
+    environment:
+      - output.elasticsearch.hosts=["ztoec-es:9200"]
+    command: filebeat -e -strict.perms=false
+    volumes:
+      - /filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - pglogs:/var/log/postgresql/:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+      - kibana
+
+  registry:
+    image: registry:2
+    restart: always
+    container_name: ztoec-registry
+    ports:
+      - 5000:5000
+    volumes:
+      - data-registry:/var/lib/registry
 
   portaineragent:
     image: portainer/agent
