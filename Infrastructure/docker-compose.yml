@@ -7,8 +7,6 @@ volumes:
     driver: local
   data-elasticsearch:
     driver: local
-  data-registry:
-    driver: local
 
 services:
   postgres:
@@ -27,27 +25,6 @@ services:
       - "co.elastic.logs/module=postgresql"
       - "co.elastic.logs/fileset.stdout=access"
       - "co.elastic.logs/fileset.stderr=error"
-
-  keycloak:
-    container_name: ztoec-keycloak
-    image: jboss/keycloak
-    restart: always
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_SCHEMA: public
-      DB_PASSWORD: password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: 2020
-    volumes:
-      - /keycloak/themes/genesis:/opt/jboss/keycloak/themes/genesis
-      - /keycloak/themes/zhoec:/opt/jboss/keycloak/themes/zhoec
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
 
   rabbitmq:
     image: rabbitmq:management
