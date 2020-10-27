@@ -18,6 +18,9 @@ services:
     environment:
         ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
         ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
+        RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
+        RabbitMQ__UserName: ${RabbitMQ__UserName}
+        RabbitMQ__Password: ${RabbitMQ__Password}
     ports:
       - "5050:80"
 
