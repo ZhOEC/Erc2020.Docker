@@ -3,7 +3,7 @@ version: "3.6"
 services:
   erc.households.indexing:
     container_name: "ztoec-indexing"
-    image: ${DOCKER_REGISTRY}erc/households/indexing
+    image: ${DOCKER_REGISTRY}erc/households/indexing:latest
     restart: always
     environment:
         RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
@@ -13,7 +13,7 @@ services:
 
   erc.households.api:
     container_name: "ztoec-households-api"
-    image: ${DOCKER_REGISTRY}erc/households/api
+    image: ${DOCKER_REGISTRY}erc/households/api:latest
     restart: always
     environment:
         ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
@@ -26,7 +26,7 @@ services:
 
   erc.households.printbills.api:
     container_name: "ztoec-households-printbills-api"
-    image: ${DOCKER_REGISTRY}erc/households/printbills/api
+    image: ${DOCKER_REGISTRY}erc/households/printbills/api:latest
     restart: always
     environment:
         ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
@@ -39,22 +39,20 @@ services:
 
   erc.households.ui:
     container_name: "ztoec-households-ui"
-    image: ${DOCKER_REGISTRY}erc/households/ui
+    image: ${DOCKER_REGISTRY}erc/households/ui:latest
     restart: always
     ports:
       - "8888:80"
-
-  erc.households.dso.bridge:
-    container_name: "ztoec-households-dso-bridge"
-    image: ${DOCKER_REGISTRY}erc/households/dso-bridge
+      
+  erc.households.claculation:
+    container_name: "ztoec-households-calculation"
+    image: ${DOCKER_REGISTRY}erc/households/calculation:latest
     restart: always
     environment:
       RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
+      ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
       RabbitMQ__UserName: ${RabbitMQ__UserName}
       RabbitMQ__Password: ${RabbitMQ__Password}
-      ZtoeRabbitMQ__ConnectionString: ${ZtoeRabbitMQ__ConnectionString}
-      ZtoeRabbitMQ__Username: ${ZtoeRabbitMQ__UserName}
-      ZtoeRabbitMQ__Password: ${ZtoeRabbitMQ__Password}
 
 networks:
   default:
