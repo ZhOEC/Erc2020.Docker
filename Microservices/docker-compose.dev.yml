@@ -5,22 +5,11 @@ services:
     container_name: "ztoec-indexing"
     image: ${DOCKER_REGISTRY}erc/households/indexing:dev
     restart: always
-    environment:
-        RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
-        RabbitMQ__UserName: ${RabbitMQ__UserName}
-        RabbitMQ__Password: ${RabbitMQ__Password}
-        ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
 
   erc.households.api:
     container_name: "ztoec-households-api"
     image: ${DOCKER_REGISTRY}erc/households/api:dev
     restart: always
-    environment:
-        ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
-        ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
-        RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
-        RabbitMQ__UserName: ${RabbitMQ__UserName}
-        RabbitMQ__Password: ${RabbitMQ__Password}
     ports:
       - "5050:80"
 
@@ -28,12 +17,6 @@ services:
     container_name: "ztoec-households-printbills-api"
     image: ${DOCKER_REGISTRY}erc/households/printbills/api:dev
     restart: always
-    environment:
-        ConnectionStrings__ErcContext: ${ConnectionStrings__ErcContext}
-        ConnectionStrings__Elasticsearch: ${ConnectionStrings__Elasticsearch}
-        RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
-        RabbitMQ__UserName: ${RabbitMQ__UserName}
-        RabbitMQ__Password: ${RabbitMQ__Password}
     ports:
       - "5060:80"
 
@@ -44,17 +27,15 @@ services:
     ports:
       - "8888:80"
 
+  erc.households.claculation:
+    container_name: "ztoec-households-calculation"
+    image: ${DOCKER_REGISTRY}erc/households/calculation:dev
+    restart: always
+
   erc.households.dso.bridge:
     container_name: "ztoec-households-dso-bridge"
     image: ${DOCKER_REGISTRY}erc/households/dso-bridge:dev
     restart: always
-    environment:
-      RabbitMQ__ConnectionString: ${RabbitMQ__ConnectionString}
-      RabbitMQ__UserName: ${RabbitMQ__UserName}
-      RabbitMQ__Password: ${RabbitMQ__Password}
-      ZtoeRabbitMQ__ConnectionString: ${ZtoeRabbitMQ__ConnectionString}
-      ZtoeRabbitMQ__Username: ${ZtoeRabbitMQ__UserName}
-      ZtoeRabbitMQ__Password: ${ZtoeRabbitMQ__Password}
 
 networks:
   default:

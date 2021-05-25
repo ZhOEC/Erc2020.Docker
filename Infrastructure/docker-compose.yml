@@ -7,6 +7,8 @@ volumes:
     driver: local
   data-elasticsearch:
     driver: local
+  pglogs:
+    driver: local
 
 services:
   postgres:
@@ -16,9 +18,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 2020
     ports:
       - 5432:5432
     labels:
@@ -31,6 +32,9 @@ services:
     restart: always
     container_name: ztoec-rabbitmq
     hostname: 'ztoec-rabbitmq'
+    build:
+      context: .
+      dockerfile: Dockerfile.RabbitMQ
     environment:
       - RABBITMQ_DEFAULT_VHOST=households
     ports:
@@ -41,7 +45,7 @@ services:
       - data-rabbitmq:/var/lib/rabbitmq
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.2
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.0
     restart: always
     container_name: ztoec-es
     environment:
@@ -53,6 +57,31 @@ services:
       - 9200:9200
       - 9300:9300
 
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.9.0
+    restart: always
+    container_name: ztoec-kibana
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat-oss:7.9.0
+    restart: always
+    container_name: ztoec-filebeat
+    environment:
+      - output.elasticsearch.hosts=["ztoec-es:9200"]
+    command: filebeat -e -strict.perms=false
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - pglogs:/var/log/postgresql/:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+      - kibana
+  
   portaineragent:
     image: portainer/agent
     restart: always
